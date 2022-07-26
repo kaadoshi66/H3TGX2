@@ -34,13 +34,8 @@ router.post('/categorias/nova', (req, res) =>{
     }
 
     if(!req.body.nome.length < 2){
-        erros.push({texto: "Nome da categoria muito pequeno"})
+        
     }
-   
-   if(erros.length > 0){
-    res.render("admin/addcategorias", {erros: erros})
-   }
-   
     const novaCategoria = {
         nome: req.body.nome,
         slug: req.body.slug

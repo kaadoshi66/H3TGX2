@@ -28,19 +28,7 @@ router.post('/categorias/nova', (req, res) =>{
     if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
         erros.push({texto: "Nome inválido"})
     }
-
-    if(!req.body.slug || typeof req.body.slug == undefined || req.body.nome == null){
-        erros.push({texto: "Slug inválido" })
-    }
-
-    if(!req.body.nome.length < 2){
-        erros.push({texto: "Nome da categoria muito pequeno"})
-    }
-   
-   if(erros.length > 0){
-    res.render("admin/addcategorias", {erros: erros})
-   }
-   
+    
     const novaCategoria = {
         nome: req.body.nome,
         slug: req.body.slug
