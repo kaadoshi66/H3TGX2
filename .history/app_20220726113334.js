@@ -17,8 +17,8 @@ app.set('view engine', '.hbs');
 //Mongoose
 mongoose.Promise = global.Promise;
 
-mongoose.connect("mongodb://localhost/APP").then(() => {
-    console.log("MongoDB online . . .")
+mongoose.connect("mongodb://localhost/pp").then(() => {
+    console.log("Servidor online . . .")
 }).catch((erro) => {
     console.log("houve um erro ao se conectar ao servidor mongo: " + erro)
 });

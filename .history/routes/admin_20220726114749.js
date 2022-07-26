@@ -23,7 +23,7 @@ router.get('/categorias/add', (req, res) =>{
 
 router.post('/categorias/nova', (req, res) =>{
       const novaCategoria = {
-        nome: req.body.nome,
+        nome: req.body.name,
         slug: req.body.slug
     }
 

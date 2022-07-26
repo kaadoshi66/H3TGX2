@@ -22,15 +22,15 @@ router.get('/categorias/add', (req, res) =>{
 })
 
 router.post('/categorias/nova', (req, res) =>{
-      const novaCategoria = {
-        nome: req.body.nome,
+    const novaCategoria = {
+        nome: req.body.name,
         slug: req.body.slug
     }
 
     new Categoria(novaCategoria).save().then(() =>{
         console.log("Categoria salva com sucesso!")
-    }).catch((err) =>{
-        console.log("Erro ao salvar categoria!" + err)       
+    }).catch((erro) =>{
+        console.log("Erro ao salvar categoria!" + erro)       
     })
 
 })
