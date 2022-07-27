@@ -77,19 +77,15 @@ router.post("/categorias/edit", (req, res) => {
         var erros = []
 
         if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
-            erros.push({ texto: "Nome inválido" })
+            req.flash("Nome inválido")
         }
-    
+
         if (!req.body.slug || typeof req.body.slug == undefined || req.body.nome == null) {
-            erros.push({ texto: "Slug inválido" })
+            req.flash("Slug inválido")
         }
-    
+
         if (req.body.nome.length < 2) {
-            erros.push({ texto: "Nome da categoria muito pequeno" })
-        }
-    
-        if (erros.length > 0) {
-            res.render("admin/addcategorias", { erros: erros })
+            req.flash("Nome da categoria muito pequeno")
         } else {
             var update = { nome: req.body.nome, slug: req.body.slug };
             Categoria.findOneAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {

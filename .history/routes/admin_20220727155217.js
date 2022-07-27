@@ -74,41 +74,22 @@ router.get("/categorias/edit/:id", (req, res) => {
 
 router.post("/categorias/edit", (req, res) => {
     try {
-        var erros = []
-
-        if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
-            erros.push({ texto: "Nome inválido" })
-        }
-    
-        if (!req.body.slug || typeof req.body.slug == undefined || req.body.nome == null) {
-            erros.push({ texto: "Slug inválido" })
-        }
-    
-        if (req.body.nome.length < 2) {
-            erros.push({ texto: "Nome da categoria muito pequeno" })
-        }
-    
-        if (erros.length > 0) {
-            res.render("admin/addcategorias", { erros: erros })
-        } else {
-            var update = { nome: req.body.nome, slug: req.body.slug };
-            Categoria.findOneAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {
-                if (err) {
-                    console.log(err.message)
-                    req.flash("error_msg", "Houve um erro interno ao salvar a edição da categoria")
-                    res.redirect("/admin/categorias")
-                }
-                req.flash("success_msg", "Categoria editada com sucesso!!")
+        var update = { nome: req.body.nome, slug: req.body.slug };
+        Categoria.findOneAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {
+            if (err) {
+                console.log(err.message)
+                req.flash("error_msg", "Houve um erro interno ao salvar a edição da categoria")
                 res.redirect("/admin/categorias")
-            })
-        }
-
-
+            }
+            req.flash("success_msg", "Categoria editada com sucesso!!")
+            res.redirect("/admin/categorias")
+        })
     } catch (e) {
         req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString() });
         // console.log(e.message);
-        res.redirect(`/admin/categorias/edit${req.params.id}?edit=false`);
+        res.redirect('/admin/categorias?edit=false');
     }
+}
 
 })
 

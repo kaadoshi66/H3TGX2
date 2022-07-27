@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, "public")))
 //MIDDLEWAREteste!!!
 
 app.use((req, res, next) => {
-    console.log("atulizou a pagina ")
+    console.log("oi sou um middleware!")
     next();
 })
 
