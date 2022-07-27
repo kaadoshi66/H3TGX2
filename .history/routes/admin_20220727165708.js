@@ -112,7 +112,7 @@ router.post("/categorias/edit", (req, res) => {
 
 })
 
-router.post("/categorias/deletar", (req, res) => {
+router.post("/categoria/deletar", (req, res) => {
     Categoria.remove({ _id: req.body.id }).lean().then(() => {
         req.flash("success_msg", "Categoria deletada com sucesso!!")
         res.redirect("/admin/categorias")
@@ -122,17 +122,8 @@ router.post("/categorias/deletar", (req, res) => {
     })
 })
 
-router.get("/postagens", (req, res) => {
-    res.render("admin/postagens")
-})
-router.get("/postagens/add", (req, res)=>{
-    Categoria.find().lean().then((categorias)=>{
-        res.render("admin/addpostagens", {categorias: categorias})
-    }).catch((err) => {
-        req.flash("error_msg", "Houve um erro ao carregar o formulário")
-        res.redirect("/admin")
-    })
-    
+router.get("/teste", (req, res) => {
+    res.send("isso é um teste")
 })
 
 

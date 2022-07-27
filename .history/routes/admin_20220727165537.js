@@ -79,15 +79,15 @@ router.post("/categorias/edit", (req, res) => {
         if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
             erros.push({ texto: "Nome inválido" })
         }
-
+    
         if (!req.body.slug || typeof req.body.slug == undefined || req.body.nome == null) {
             erros.push({ texto: "Slug inválido" })
         }
-
+    
         if (req.body.nome.length < 2) {
             erros.push({ texto: "Nome da categoria muito pequeno" })
         }
-
+    
         if (erros.length > 0) {
             res.render("admin/categorias", { erros: erros })
         } else {
@@ -112,27 +112,18 @@ router.post("/categorias/edit", (req, res) => {
 
 })
 
-router.post("/categorias/deletar", (req, res) => {
-    Categoria.remove({ _id: req.body.id }).lean().then(() => {
-        req.flash("success_msg", "Categoria deletada com sucesso!!")
-        res.redirect("/admin/categorias")
-    }).catch((err) => {
-        req.flash("error_msg", "Houve um erro ao deletar a categoria")
-        res.redirect()
+router.post("/categoria/deletar", (req, res) => {
+    Categoria.remove({_id:req.body.id}).lean().then(()=>{
+      req.flash("success_msg", "Categoria deletada com sucesso!!")
+      res.redirect("/admin/categorias")  
     })
+}).catch((err) =>{
+    req.flash("error_msg", "Houve um erro ao deletar a categoria")
+    res.redirect("/admin/categorias")
 })
 
-router.get("/postagens", (req, res) => {
-    res.render("admin/postagens")
-})
-router.get("/postagens/add", (req, res)=>{
-    Categoria.find().lean().then((categorias)=>{
-        res.render("admin/addpostagens", {categorias: categorias})
-    }).catch((err) => {
-        req.flash("error_msg", "Houve um erro ao carregar o formulário")
-        res.redirect("/admin")
-    })
-    
+router.get("/teste", (req, res) => {
+    res.send("isso é um teste")
 })
 
 
