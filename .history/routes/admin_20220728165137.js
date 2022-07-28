@@ -282,6 +282,15 @@ router.post("/postagens/edit", (req, res) => {
         if (erros.length > 0) {
             res.render("admin/addpostagens", { erros: erros })
         } else {
+            //todo
+            // Postagem.findOne({ _id: req.body.id }).lean().then((postagem) => {
+
+            //     postagem.titulo = req.body.titulo
+            //     postagem.slug = req.body.slug
+            //     postagem.descricao = req.body.descricao
+            //     postagem.conteudo = req.body.conteudo
+            //     postagem.categoria = req.body.categoria
+
                 var update = { titulo: req.body.titulo, slug: req.body.slug, descricao: req.body.descricao, conteudo: req.body.conteudo, categoria: req.body.categoria };
                 Postagem.findByIdAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {
                     if (err) {
@@ -292,7 +301,11 @@ router.post("/postagens/edit", (req, res) => {
                     req.flash("success_msg", "Postagem editada com sucesso!!")
                     res.redirect("/admin/postagens")
                 })
-}
+
+
+            })
+            //todo
+        }
 
     } catch (e) {
         req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString() });

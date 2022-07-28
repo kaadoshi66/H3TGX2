@@ -239,67 +239,27 @@ router.get("/postagens/edit/:id", (req, res) => {
 })
 
 router.post("/postagens/edit", (req, res) => {
-    try {
-        var erros = []
+    Postagem.findOne({_id: req.body.id}).lean().then((postagem) =>{
+         
+        postagem.titulo = req.body.titulo
+        postagem.slug  = req.body.slug
+        postagem.descricao = req.body.descricao
+        postagem.conteudo = req.body.conteudo
+        postagem.categoria = req.body.categoria
 
-        if (!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null) {
-            erros.push({ texto: "Titulo inválido" })
-        }
-    
-        if (!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null) {
-            erros.push({ texto: "Slug inválido" })
-        }
-    
-        if (!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null) {
-            erros.push({ texto: "Descrição inválido" })
-        }
-    
-        if (!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null) {
-            erros.push({ texto: "Conteúdo inválido" })
-        }
-    
-        if (req.body.categoria == "0") {
-    
-            erros.push({ texto: "Categoria invalida, registre uma categoria" })
-        }
-    
-        if (req.body.titulo.length < 2) {
-            erros.push({ texto: "Titulo da postagem é pequeno" })
-        }
-    
-        if (req.body.slug.length < 2) {
-            erros.push({ texto: "Slug da postagem é pequeno" })
-        }
-    
-        if (req.body.descricao.length < 2) {
-            erros.push({ texto: "Descrição da postagem é pequeno" })
-        }
-    
-        if (req.body.conteudo.length < 2) {
-            erros.push({ texto: "Conteúdo da postagem é pequeno" })
-        }
-
-        if (erros.length > 0) {
-            res.render("admin/addpostagens", { erros: erros })
-        } else {
-                var update = { titulo: req.body.titulo, slug: req.body.slug, descricao: req.body.descricao, conteudo: req.body.conteudo, categoria: req.body.categoria };
-                Postagem.findByIdAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {
-                    if (err) {
-                        console.log(err.message)
-                        req.flash("error_msg", "Houve um erro interno ao salvar a edição da postagem")
-                        res.redirect("/admin/postagens")
-                    }
-                    req.flash("success_msg", "Postagem editada com sucesso!!")
-                    res.redirect("/admin/postagens")
-                })
-}
-
-    } catch (e) {
-        req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString() });
-        // console.log(e.message);
-        res.redirect(`/admin/postagens/edit${req.params.id}?edit=false`);
-    }
-
+        postagem.save().the(() =>{
+            req.flash("success_msg", "Postagem editada com sucesso!")
+            res.redirect("/admin/postagens")
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_msg", "Erro interno");
+            res.redirect("/admin/postagens")
+        })
+    }).catch((err) =>{
+        console.log(err);
+        eq.flash("error_msg", "Houve um erro ao salvar a edição");
+            res.redirect("/admin/postagens")
+    })
 })
 
 module.exports = router

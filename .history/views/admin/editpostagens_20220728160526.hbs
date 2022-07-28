@@ -6,15 +6,16 @@
 <div class="card">
     <div class="card-body">
         <h4 class="mt-4">Nova postagem</h4>
-        <form action="/admin/postagens/nova" method="POST">
+        <form action="/admin/postagens/edit" method="POST">
+            <input type="hidden" value="{{postagem._id}}" name="id">
             <label for="titulo">Título: </label>
-            <input type="text" name="titulo" class="form-control" >
+            <input type="text" name="titulo" class="form-control" value="{{postagem.titulo}}">
             <label for="slug">Slug: </label>
-            <input type="text" name="slug" class="form-control" >
+            <input type="text" name="slug" class="form-control" value="{{postagem.slug}}">
             <label for="descricao">Descrição: </label>
-            <input type="text" name="descricao" class="form-control" >
+            <input type="text" name="descricao" class="form-control" value="{{postagem.descricao}}">
             <label for="conteudo">Conteúdo: </label>
-            <textarea name="conteudo" class="form-control" ></textarea>
+            <textarea name="conteudo" class="form-control" > {{postagem.conteudo}}</textarea>
             <label for="categoria">Categoria: </label>
             <select class="mt-2" name="categoria" class="custom-select">
                 {{#each categorias}}
@@ -22,8 +23,8 @@
                 {{else}}
                 <option value="0">Nenhuma categoria registrada</option>
                 {{/each}}
-            </select> <br>
-            <button class="btn btn-success mt-4" type="submit">Criar postagem</button>
+            </select><br>
+            <button class="btn btn-success mt-4" type="submit">Editar postagem</button>
         </form>
     </div>
 </div>
