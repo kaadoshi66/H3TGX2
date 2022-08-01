@@ -241,9 +241,52 @@ router.get("/postagens/edit/:id", (req, res) => {
 router.post("/postagens/edit", (req, res) => {
   
     try {
-      
+        var erros = []
+
+        if (!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null) {
+            erros.push({ texto: "Titulo inválido" })
+        }
+
+        if (!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null) {
+            erros.push({ texto: "Slug inválido" })
+        }
+
+        if (!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null) {
+            erros.push({ texto: "Descrição inválido" })
+        }
+
+        if (!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null) {
+            erros.push({ texto: "Conteúdo inválido" })
+        }
+
+        // if (req.body.categoria == "0") {
+
+        //     erros.push({ texto: "Categoria invalida, registre uma categoria" })
+        // }
+
+        if (req.body.titulo.length < 2) {
+            erros.push({ texto: "Titulo da postagem é pequeno" })
+        }
+
+        if (req.body.slug.length < 2) {
+            erros.push({ texto: "Slug da postagem é pequeno" })
+        }
+
+        if (req.body.descricao.length < 2) {
+            erros.push({ texto: "Descrição da postagem é pequeno" })
+        }
+
+        if (req.body.conteudo.length < 2) {
+            erros.push({ texto: "Conteúdo da postagem é pequeno" })
+        }
+
+        if (erros.length > 0) {
+            console.log("Erro quando tem erro")
+            res.status(500).send("erros");
+            res.render("admin/editpostagens", { erros: erros })
+        } else {
             var update = { titulo: req.body.titulo, slug: req.body.slug, descricao: req.body.descricao, conteudo: req.body.conteudo, categoria: req.body.categoria };
-            Postagem.findOneAndUpdate({ _id: req.body.id }, update, {runValidators: true }, function (err) {
+            Postagem.findByIdAndUpdate({ _id: req.body.id }, update, {runValidators: true }, function (err) {
                 if (err) {
                     console.log("Erro if no else");
                     console.log(err.message)
@@ -253,7 +296,7 @@ router.post("/postagens/edit", (req, res) => {
                 req.flash("success_msg", "Postagem editada com sucesso!!")
                 res.redirect("/admin/postagens")
             })
-       
+        }
 
     } catch (e) {
         console.log("Erro final no catch")

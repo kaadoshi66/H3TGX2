@@ -113,7 +113,7 @@ router.post("/categorias/edit", (req, res) => {
 
     } catch (e) {
         req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString() });
-        console.log(e);
+       console.log(e);
         res.redirect(`/admin/categorias/edit${req.params.id}?edit=false`);
     }
 
@@ -223,7 +223,7 @@ router.post("/postagens/nova", (req, res) => {
 
 
 router.get("/postagens/edit/:id", (req, res) => {
-    Postagem.findOne({ _id: req.params.id }).lean().then((postagem) => {
+    Postagem.findOne({_id: req.params.id }).lean().then((postagem) => {
         Categoria.find().lean().then((categorias) => {
             res.render("admin/editpostagens", { categorias: categorias, postagem: postagem })
         }).catch((err) => {
@@ -239,33 +239,79 @@ router.get("/postagens/edit/:id", (req, res) => {
 })
 
 router.post("/postagens/edit", (req, res) => {
-  
+    console.log(req.params.id);
     try {
-      
-            var update = { titulo: req.body.titulo, slug: req.body.slug, descricao: req.body.descricao, conteudo: req.body.conteudo, categoria: req.body.categoria };
-            Postagem.findOneAndUpdate({ _id: req.body.id }, update, {runValidators: true }, function (err) {
-                if (err) {
-                    console.log("Erro if no else");
-                    console.log(err.message)
-                    req.flash("error_msg", "Houve um erro interno ao salvar a edição da postagem")
+        var erros = []
+
+        if (!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null) {
+            erros.push({ texto: "Titulo inválido" })
+        }
+    
+        if (!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null) {
+            erros.push({ texto: "Slug inválido" })
+        }
+    
+        if (!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null) {
+            erros.push({ texto: "Descrição inválido" })
+        }
+    
+        if (!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null) {
+            erros.push({ texto: "Conteúdo inválido" })
+        }
+    
+        if (req.body.categoria == "0") {
+    
+            erros.push({ texto: "Categoria invalida, registre uma categoria" })
+        }
+    
+        if (req.body.titulo.length < 2) {
+            erros.push({ texto: "Titulo da postagem é pequeno" })
+        }
+    
+        if (req.body.slug.length < 2) {
+            erros.push({ texto: "Slug da postagem é pequeno" })
+        }
+    
+        if (req.body.descricao.length < 2) {
+            erros.push({ texto: "Descrição da postagem é pequeno" })
+        }
+    
+        if (req.body.conteudo.length < 2) {
+            erros.push({ texto: "Conteúdo da postagem é pequeno" })
+        }
+
+        if (erros.length > 0) {
+            res.render("admin/editpostagens", { erros: erros })
+            console.log(erros)
+            console.log('tamanho do conteudo')
+            console.log(req.boby.conteudo.length)
+            
+        } else {
+            console.log('tamanho do conteudo')
+            console.log(req.boby.conteudo.length)
+                var update = { titulo: req.body.titulo, slug: req.body.slug, descricao: req.body.descricao, conteudo: req.body.conteudo, categoria: req.body.categoria };
+                Postagem.findByIdAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {
+                    if (err) {
+                        console.log(err.message)
+                        req.flash("error_msg", "Houve um erro interno ao salvar a edição da postagem")
+                        res.redirect("/admin/postagens")
+                    }
+                    req.flash("success_msg", "Postagem editada com sucesso!!")
                     res.redirect("/admin/postagens")
-                }
-                req.flash("success_msg", "Postagem editada com sucesso!!")
-                res.redirect("/admin/postagens")
-            })
-       
+                })
+}
 
     } catch (e) {
-        console.log("Erro final no catch")
         req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString() });
-            res.redirect(`/admin/postagens/edit/${req.body.id}?edit=false`);
+     console.log(e.message);
+        res.redirect(`/admin/postagens/edit/${req.body.id}?edit=false`);
     }
 
 })
 
 router.get("/postagens/deletar/:id", (req, res) => {
-    Postagem.remove({_id: req.params.id}).then(() => {
-    res.redirect("/admin/postagens")
+    Postagem.remove({_id: req.params.id }).then(() => {
+        res.redirect("/admin/postagens")
     })
 })
 
