@@ -91,7 +91,7 @@ app.get('/', (req, res) => {
 
                 Postagem.find({ categoria: categoria._id }).lean().then((postagens) => {
 
-                    res.render("categorias/postagens", { postagens: postagens, categoria: categoria })
+                    res.render("categorias/postagens", {postagens: postagens, categoria: categoria} )
                 }).catch((err) => {
                     req.flash("error_msg", "Houve um erro ao listar os posts!")
                     res.redirect("/")
@@ -111,7 +111,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/admin', admin)
-app.use("/usuarios", usuarios)
+app.use('/usuarios', usuarios)
 
 //outros
 const PORT = 8081;
