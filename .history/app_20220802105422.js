@@ -97,7 +97,8 @@ app.get('/', (req, res) => {
                 })
 
             } else {
-                req.flash("error_msg", "Esta categoria não existe")
+                // req.flash("error_msg", "Esta categoria não existe")
+                req.flash("error_msg",  { type: 'danger', fixed: true, text: 'Esta categoria não existe' })
                 res.redirect("/")
             }
         })

@@ -55,7 +55,6 @@ app.get('/', (req, res) => {
     Postagem.find().lean().populate("categoria").sort({ data: "desc" }).then((postagens) => {
         res.render("index", { postagens: postagens })
     }).catch((err) => {
-        console.log(err)
         req.flash("error_msg", "Houve um erro interno")
         res.render("/404")
     })
@@ -66,12 +65,11 @@ app.get('/', (req, res) => {
                 res.render("postagem/index", { postagem: postagem })
             } else {
                 req.flash("error_msg", "Esta postagem não existe")
-                res.redirect("/")
+                res.render("/")
             }
         }).catch((err) => {
-            console.log(err)
             req.flash("error_msg", "Houve um erro interno")
-            res.redirect("/")
+            res.render("/")
         })
     })
 
@@ -80,7 +78,7 @@ app.get('/', (req, res) => {
             res.render("categorias/index", { categorias: categorias })
         }).catch((err) => {
             req.flash("error_msg", "Houve um erro interno ao listar as categorias")
-            res.redirect("/")
+            res.render("/")
         })
     })
 
@@ -90,15 +88,14 @@ app.get('/', (req, res) => {
 
                 Postagem.find({ categoria: categoria._id }).lean().then((postagens) => {
 
-                    res.render("categorias/postagens", {postagens: postagens, categoria: categoria} )
                 }).catch((err) => {
                     req.flash("error_msg", "Houve um erro ao listar os posts!")
-                    res.redirect("/")
+                    res.render("/")
                 })
 
             } else {
                 req.flash("error_msg", "Esta categoria não existe")
-                res.redirect("/")
+                res.render("/")
             }
         })
     })

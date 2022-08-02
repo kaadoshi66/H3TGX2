@@ -1,0 +1,14 @@
+{{#if success_msg}}
+    <div class="alert alert-success">{{success_msg}}</div>
+{{/if}}
+
+{{#if error_msg}}
+    <div class="alert alert-danger  {{#unless fixed}}alert-dismissible fade show{{/unless}}">
+        {{error_msg}}
+        {{#unless fixed}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            {{/unless}}
+    </div>
+{{/if}}

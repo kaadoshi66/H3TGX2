@@ -142,10 +142,10 @@ router.get("/postagens", (req, res) => {
 })
 router.get("/postagens/add", (req, res) => {
     Categoria.find().lean().then((categorias) => {
-
+        console.log(categorias)
         res.render("admin/addpostagens", { categorias: categorias })
     }).catch((err) => {
-
+        console.log(err)
         req.flash("error_msg", "Houve um erro ao carregar o formulário")
         res.redirect("/admin")
     })
@@ -211,7 +211,7 @@ router.post("/postagens/nova", (req, res) => {
             // req.flash("success_msg", "Postagem criada com sucesso")
             res.redirect("/admin/postagens")
         }).catch((err) => {
-
+            console.log(err.message)
             req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString() });
             // req.flash("error_msg", "Houve um erro durante o salvamento da postagem")
             res.redirect("/admin/postagens")
@@ -227,46 +227,47 @@ router.get("/postagens/edit/:id", (req, res) => {
         Categoria.find().lean().then((categorias) => {
             res.render("admin/editpostagens", { categorias: categorias, postagem: postagem })
         }).catch((err) => {
-
+            console.log(err)
             req.flash("error-msg", "Houve um erro ao listar as categorias")
             res.redirect("/admin/postagens")
         })
     }).catch((err) => {
-
+        console.log(err)
         req.flash("error_msg", "Houve um erro ao carregar o formulário de edição")
         res.redirect("/admin/postagens")
     })
 })
 
 router.post("/postagens/edit", (req, res) => {
-
+  
     try {
-
-        var update = { titulo: req.body.titulo, slug: req.body.slug, descricao: req.body.descricao, conteudo: req.body.conteudo, categoria: req.body.categoria };
-        Postagem.findOneAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {
-            if (err) {
-
-                req.flash("error_msg", "Houve um erro interno ao salvar a edição da postagem")
+      
+            var update = { titulo: req.body.titulo, slug: req.body.slug, descricao: req.body.descricao, conteudo: req.body.conteudo, categoria: req.body.categoria };
+            Postagem.findOneAndUpdate({ _id: req.body.id }, update, {runValidators: true }, function (err) {
+                if (err) {
+                    console.log("Erro if no else");
+                    console.log(err.message)
+                    req.flash("error_msg", "Houve um erro interno ao salvar a edição da postagem")
+                    res.redirect("/admin/postagens")
+                }
+                req.flash("success_msg", "Postagem editada com sucesso!!")
                 res.redirect("/admin/postagens")
-            }
-            req.flash("success_msg", "Postagem editada com sucesso!!")
-            res.redirect("/admin/postagens")
-        })
-
+            })
+       
 
     } catch (e) {
-
-        req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString() });
-        res.redirect(`/admin/postagens/edit/${req.body.id}?edit=false`);
+        console.log("Erro final no catch")
+        req.flash('alert', { type: 'danger', fixed: true, text: e.message.toString()});
+            res.redirect(`/admin/postagens/edit/${req.body.id}?edit=false`);
     }
 
 })
 
 router.get("/postagens/deletar/:id", (req, res) => {
-    Postagem.remove({ _id: req.params.id }).then(() => {
+    Postagem.remove({_id: req.params.id}).then(() => {
         req.flash("success_msg", "Postagem deletada com sucesso!!")
         res.redirect("/admin/postagens")
-    }).catch((err) => {
+    }).catch((err) =>{
         req.flash("error_msg", "Houve um erro interno")
         res.redirect("/admin/postagens")
     })
