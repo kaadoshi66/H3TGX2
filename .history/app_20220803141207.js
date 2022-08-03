@@ -13,8 +13,8 @@ const Postagem = mongoose.model("postagens");
 require("./models/Categoria");
 const Categoria = mongoose.model("categorias");
 const usuarios = require("./routes/usuario");
-const passport = require("passport");
-require("./config/auth")(passport);
+const passport = require("passport")
+require("./config/auth")(passport)
 //configurações
 //Sessão
 app.use(session({
@@ -28,9 +28,7 @@ app.use(flash());
 //middleware
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg");
-    res.locals.error_msg = req.flash("error_msg");
-    res.locals.error = req.flash("error")
-    res.locals.user = req.user || null;
+    res.locals.error_msg = req.flash("error_msg")
     next();
 })
 /*BODY PARSER*/

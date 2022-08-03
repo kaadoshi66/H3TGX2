@@ -4,7 +4,6 @@ const mongoose = require('mongoose')
 require("../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 const bcrypt = require("bcryptjs")
-const passport = require("passport")
 
 router.get("/registro", (req, res) => {
     res.render("usuarios/registro")
@@ -41,7 +40,7 @@ router.post("/registro", (req, res) => {
         Usuario.findOne({ email: req.body.email }).lean().then((usuario) => {
             if (usuario) {
                 req.flash("error_msg", "Já existe uma conta com este e-mail")
-                res.redirect("/usuarios/registro")
+                res.redirect("/")
             } else {
 
                 const novoUsuario = new Usuario({
@@ -50,25 +49,8 @@ router.post("/registro", (req, res) => {
                     senha: req.body.senha
                 })
 
-                bcrypt.genSalt(10, (erro, salt) => {
-                    bcrypt.hash(novoUsuario.senha, salt, (erro, hash) => {
-                        if (erro) {
-                            req.flash("error_msg", "Houve um erro durante o salvamento do usuário")
-                            res.redirect("/")
-                        }
-
-                        novoUsuario.senha = hash
-
-                        novoUsuario.save().then((newUser) => {
-                            req.flash("success_msg", "Usuário criado com sucesso!")
-                            res.redirect("/")
-                        }).catch((err) => {
-                            req.flash("error_msg", "Houve um erro ao criar o usuário, tente de novo")
-                            res.redirect("/usuarios/registro")
-                        })
-
-
-                    })
+                 bcrypt.genSalt(10, (erro, salt) =>{
+                   bcrypt.hash()
                 })
 
             }
@@ -80,18 +62,7 @@ router.post("/registro", (req, res) => {
     }
 })
 
-router.get("/login", (req, res) =>{
-    res.render("usuarios/login")
-})
 
-router.post("/login", (req, res, next) =>{
-  
-    passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/usuarios/login",
-        failureFlash : true
-    })(req, res, next)
 
-})
 
 module.exports = router
