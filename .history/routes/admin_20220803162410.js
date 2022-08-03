@@ -5,14 +5,14 @@ require("../models/Categoria");
 const Categoria = mongoose.model("categorias");
 require("../models/Postagem");
 const Postagem = mongoose.model("postagens");
-const {eAdmin} = require("../helpers/eAdmin")
+const { eAdmin } = require("../helpers/eAdmin")
 
-router.get('/',  (req, res) => {
+router.get('/', (req, res) => {
     res.render("admin/index")
 
 })
 
-router.get('/posts', eAdmin, (req, res) => {
+router.get('/posts', (req, res) => {
     res.send("pagina de posts")
 })
 
@@ -80,7 +80,7 @@ router.get("/categorias/edit/:id", eAdmin, (req, res) => {
 
 })
 
-router.post("/categorias/edit", eAdmin,(req, res) => {
+router.post("/categorias/edit", eAdmin, (req, res) => {
     try {
         var erros = []
 
@@ -97,7 +97,7 @@ router.post("/categorias/edit", eAdmin,(req, res) => {
         }
 
         if (erros.length > 0) {
-            res.render("admin/categorias",  { erros: erros })
+            res.render("admin/categorias", eAdmin, { erros: erros })
         } else {
             var update = { nome: req.body.nome, slug: req.body.slug };
             Categoria.findOneAndUpdate({ _id: req.body.id }, update, { runValidators: true }, function (err) {
