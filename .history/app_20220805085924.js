@@ -43,7 +43,7 @@ app.set('view engine', '.hbs');
 //Mongoose
 mongoose.Promise = global.Promise;
 
-mongoose.connect(db.mongoURI).then(() => {
+mongoose.connect("mongodb://localhost/APP").then(() => {
     console.log("MongoDB online . . .")
 }).catch((erro) => {
     console.log("houve um erro ao se conectar ao servidor mongo: " + erro)
